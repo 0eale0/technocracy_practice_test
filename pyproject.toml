@@ -6,6 +6,9 @@ authors = ["eale <RUSLIKPVP@yandex.ru>"]
 
 [tool.poetry.dependencies]
 python = "^3.10"
+Django = "^4.0.5"
+psycopg2 = "^2.9.3"
+djangorestframework = "^3.13.1"
 
 [tool.poetry.dev-dependencies]
 
