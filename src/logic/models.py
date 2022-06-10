@@ -14,12 +14,9 @@ class Note(models.Model):
     text = models.CharField(max_length=5000, **NULLABLE)
     date = models.DateTimeField()
 
-
-class UserNote(models.Model):
     user = models.ForeignKey(User,
-                             on_delete=models.CASCADE)
-    note = models.ForeignKey(Note,
-                             on_delete=models.CASCADE)
+                             on_delete=models.CASCADE,
+                             **NOT_NULLABLE)
 
 
 class Category(models.Model):
