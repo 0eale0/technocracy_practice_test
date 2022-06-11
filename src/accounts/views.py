@@ -1,11 +1,10 @@
 from rest_framework import viewsets, generics
-from rest_framework.generics import get_object_or_404
-from rest_framework.permissions import AllowAny
-from rest_framework.response import Response
+from rest_framework.permissions import AllowAny, IsAuthenticated
 from rest_framework.viewsets import ViewSetMixin
 
 from accounts.models import User
 from accounts.serializers import UserSerializer, RegisterSerializer
+from accounts.permissions import IsAdmin
 
 
 class RegisterView(ViewSetMixin, generics.CreateAPIView):
@@ -20,4 +19,5 @@ class UserViewSet(viewsets.ModelViewSet):
     """ViewSet CRUD for users, allowed only for superusers"""
 
     serializer_class = UserSerializer
+    permission_classes = [IsAuthenticated & IsAdmin]
     queryset = User.objects.all()

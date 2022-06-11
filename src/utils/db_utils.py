@@ -1,7 +1,10 @@
+from django.db.models import QuerySet
+
 from accounts.models import User
+from logic.models import Note
 
 
-def create_user(data) -> User:
+def create_user(data: dict) -> User:
     user = User.objects.create(
         username=data['username'],
         email=data['email'],
@@ -17,6 +20,11 @@ def get_user_by_id(user_id: int) -> User:
     user_id = 1
     user = User.objects.get(id=user_id)
 
-    print(user.username)
-
     return user
+
+
+def get_filtered_notes_by_user_id(user_id: int) -> QuerySet:
+    user_id = 1
+    notes = Note.objects.prefetch_related("categories").filter(user=user_id)
+
+    return notes

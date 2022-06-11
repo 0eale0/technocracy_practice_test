@@ -2,10 +2,9 @@ from rest_framework import viewsets
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 
-from accounts.utils.db_utils import get_user_by_id
+from utils.db_utils import get_user_by_id, get_filtered_notes_by_user_id
 from logic import models
 from logic import serializers
-from logic.permissions import IsAdmin
 
 
 class CategoryViewSet(viewsets.ModelViewSet):
@@ -30,7 +29,7 @@ class NoteViewSet(viewsets.ModelViewSet):
     def get_serializer_class(self):
         return self.serializer_classes.get(self.action, self.default_serializer_class)
 
-    # permission_classes = [IsAuthenticated]
+    permission_classes = [IsAuthenticated]
 
     queryset = models.Note.objects.all()
 
@@ -39,10 +38,21 @@ class NoteViewSet(viewsets.ModelViewSet):
         instance = self.get_object()
 
         if instance.user != user.pk and not user.is_superuser:
-            return Response("You don't have access for this note", status=405)
+            return Response("You don't have access for this note", status=403)
 
         serializer = self.get_serializer(instance)
 
+        return Response(serializer.data)
+
+    def list(self, request, *args, **kwargs):
+        queryset = get_filtered_notes_by_user_id(request.user)
+
+        page = self.paginate_queryset(queryset)
+        if page is not None:
+            serializer = self.get_serializer(page, many=True)
+            return self.get_paginated_response(serializer.data)
+
+        serializer = self.get_serializer(queryset, many=True)
         return Response(serializer.data)
 
 
