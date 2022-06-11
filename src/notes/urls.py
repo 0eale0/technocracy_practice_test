@@ -3,13 +3,13 @@ from django.urls import path, include
 
 from rest_framework import routers
 
-from accounts.urls import router as logic_router
+from accounts.urls import router as accounts_logic
 
 router = routers.DefaultRouter()
-router.registry.extend(logic_router.registry)
+router.registry.extend(accounts_logic.registry)
 
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path(r'api/', include(router.urls)),
+    path(r'api/accounts/', include(router.urls)),
 ]
