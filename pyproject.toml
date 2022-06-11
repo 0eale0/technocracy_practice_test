@@ -10,6 +10,7 @@ Django = "^4.0.5"
 psycopg2 = "^2.9.3"
 djangorestframework = "^3.13.1"
 python-dotenv = "^0.20.0"
+djangorestframework-simplejwt = "^5.2.0"
 
 [tool.poetry.dev-dependencies]
 
