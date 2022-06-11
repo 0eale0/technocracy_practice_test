@@ -45,6 +45,7 @@ INSTALLED_APPS = [
     # Third-party apps
     'rest_framework',
     # My apps
+    "accounts",
     "logic"
 ]
 
@@ -112,7 +113,7 @@ AUTH_PASSWORD_VALIDATORS = [
     },
 ]
 
-AUTH_USER_MODEL = 'logic.user'
+AUTH_USER_MODEL = 'accounts.user'
 
 
 # Internationalization

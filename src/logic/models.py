@@ -1,12 +1,9 @@
-from django.contrib.auth.models import AbstractUser
 from django.db import models
+
+from accounts.models import User
 
 NULLABLE = {"null": True, "blank": True}
 NOT_NULLABLE = {"null": False, "blank": False}
-
-
-class User(AbstractUser):
-    pass
 
 
 class Note(models.Model):
