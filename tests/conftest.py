@@ -1,6 +1,4 @@
-import os
-
-from src.tests.test_accounts.factories import UserFactory, SuperUserFactory
+from tests.test_accounts.factories import UserFactory, SuperUserFactory
 
 import pytest
 

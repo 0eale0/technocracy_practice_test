@@ -1,5 +1,4 @@
 from rest_framework import viewsets
-from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 
 from utils.db_utils import get_user_by_id, get_filtered_notes_by_user_id
