@@ -11,6 +11,7 @@ psycopg2 = "^2.9.3"
 djangorestframework = "^3.13.1"
 python-dotenv = "^0.20.0"
 djangorestframework-simplejwt = "^5.2.0"
+pytest-cov = "^3.0.0"
 
 [tool.poetry.dev-dependencies]
 
@@ -27,4 +28,4 @@ filterwarnings = [
     'ignore:function ham\(\) is deprecated:DeprecationWarning',
 ]
 python_files = ['test_*.py']
-addopts = ['-vv', '-cov', '-p', 'no:warnings']
+addopts = ['-vv', '--cov', '-p', 'no:warnings']

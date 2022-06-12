@@ -16,15 +16,14 @@ def create_user(data: dict) -> User:
     return user
 
 
-def get_user_by_id(user_id: int) -> User:
-    user_id = 1
-    user = User.objects.get(id=user_id)
+def get_user_object(user) -> User:
+    # pytest send object, simple using id. There is check for it
+    user = User.objects.get(id=user) if type(user) == int else user
 
     return user
 
 
 def get_filtered_notes_by_user_id(user_id: int) -> QuerySet:
-    user_id = 1
     notes = Note.objects.prefetch_related("categories").filter(user=user_id)
 
     return notes

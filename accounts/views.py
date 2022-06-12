@@ -18,6 +18,6 @@ class RegisterView(ViewSetMixin, generics.CreateAPIView):
 class UserViewSet(viewsets.ModelViewSet):
     """ViewSet CRUD for users, allowed only for superusers"""
 
-    serializer_class = UserSerializer
     permission_classes = [IsAuthenticated & IsAdmin]
+    serializer_class = UserSerializer
     queryset = User.objects.all()

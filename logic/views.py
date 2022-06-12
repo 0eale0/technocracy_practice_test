@@ -1,7 +1,8 @@
 from rest_framework import viewsets
+from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 
-from utils.db_utils import get_user_by_id, get_filtered_notes_by_user_id
+from utils.db_utils import get_user_object, get_filtered_notes_by_user_id
 from logic import models
 from logic import serializers
 
@@ -28,13 +29,16 @@ class NoteViewSet(viewsets.ModelViewSet):
     def get_serializer_class(self):
         return self.serializer_classes.get(self.action, self.default_serializer_class)
 
-    # permission_classes = [IsAuthenticated]
+    permission_classes = [IsAuthenticated]
 
     queryset = models.Note.objects.all()
     lookup_field = 'slug'
 
     def retrieve(self, request, *args, **kwargs):
-        user = get_user_by_id(request.user)
+        # pytest send object in request, but when we using django it send id. There is check for test
+        user = get_user_object(request.user)
+
+
         instance = self.get_object()
 
         if instance.user != user.pk and not user.is_superuser:
@@ -45,7 +49,12 @@ class NoteViewSet(viewsets.ModelViewSet):
         return Response(serializer.data)
 
     def list(self, request, *args, **kwargs):
-        queryset = get_filtered_notes_by_user_id(request.user)
+        user = get_user_object(request.user)
+
+        if user.is_superuser:
+            queryset = self.filter_queryset(self.get_queryset())
+        else:
+            queryset = get_filtered_notes_by_user_id(user.pk)
 
         page = self.paginate_queryset(queryset)
         if page is not None:

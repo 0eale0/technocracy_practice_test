@@ -13,11 +13,11 @@ class Category(models.Model):
 class Note(models.Model):
     header = models.CharField(max_length=200, **NOT_NULLABLE)
     text = models.CharField(max_length=5000, **NULLABLE)
-    date = models.DateTimeField()
-    slug = models.CharField(max_length=100, unique=True, **NOT_NULLABLE)
+    date = models.DateTimeField(auto_now=True)
+    slug = models.SlugField(max_length=100, unique=True, **NOT_NULLABLE)
 
     user = models.ForeignKey(User,
                              on_delete=models.CASCADE,
                              **NOT_NULLABLE)
 
-    categories = models.ManyToManyField(Category)
+    categories = models.ManyToManyField(Category, **NULLABLE)
