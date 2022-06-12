@@ -14,6 +14,7 @@ class Note(models.Model):
     header = models.CharField(max_length=200, **NOT_NULLABLE)
     text = models.CharField(max_length=5000, **NULLABLE)
     date = models.DateTimeField()
+    slug = models.CharField(max_length=100, unique=True, **NOT_NULLABLE)
 
     user = models.ForeignKey(User,
                              on_delete=models.CASCADE,
