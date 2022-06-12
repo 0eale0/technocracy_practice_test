@@ -355,7 +355,7 @@ fabric.properties
 
 # Environments
 db/
-*.env
+*.env.dev
 
 # Spyder project settings
 
