@@ -10,7 +10,7 @@ from logic import serializers
 class CategoryViewSet(viewsets.ModelViewSet):
     """ViewSet CRUD for category, allowed for authenticated users"""
 
-    permission_classes = [IsAuthenticated]
+    # permission_classes = [IsAuthenticated]
 
     serializer_class = serializers.CategorySerializer
     queryset = models.Category.objects.all()
@@ -29,9 +29,10 @@ class NoteViewSet(viewsets.ModelViewSet):
     def get_serializer_class(self):
         return self.serializer_classes.get(self.action, self.default_serializer_class)
 
-    permission_classes = [IsAuthenticated]
+    # permission_classes = [IsAuthenticated]
 
     queryset = models.Note.objects.all()
+    lookup_field = 'slug'
 
     def retrieve(self, request, *args, **kwargs):
         user = get_user_by_id(request.user)

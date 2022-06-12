@@ -16,9 +16,11 @@ class NoteSerializerView(serializers.ModelSerializer):
     class Meta:
         model = Note
         fields = "__all__"
+        lookup_field = 'slug'
 
 
 class NoteSerializerCreate(serializers.ModelSerializer):
     class Meta:
         model = Note
         fields = "__all__"
+        lookup_field = 'slug'
