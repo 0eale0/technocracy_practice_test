@@ -1,3 +1,5 @@
+from django.forms import model_to_dict
+
 from logic.models import Note
 from tests.conftest import InitUsers
 from logic.serializers import NoteSerializerView
@@ -37,7 +39,8 @@ class TestNotes(InitUsers):
         response = self.user_authorized.post(path=url, data=payload)
 
         result = response.json()
-        result_from_db = NoteSerializerView(Note.objects.get(id=result["id"])).data
+
+        result_from_db = model_to_dict(Note.objects.get(id=result["id"]))
 
         assert response.status_code == 201
         assert result == result_from_db
