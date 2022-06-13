@@ -1,16 +1,18 @@
-from rest_framework import viewsets
+from rest_framework import viewsets, status
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 
+from accounts.permissions import IsOwnerOrAdmin, IsOwnerOrAdminOrReadOnly
 from utils.db_utils import get_user_object, get_filtered_notes_by_user_id
 from logic import models
 from logic import serializers
 
 
 class CategoryViewSet(viewsets.ModelViewSet):
-    """ViewSet CRUD for category, allowed for authenticated users"""
+    """ViewSet CRUD for category, allowed readonly for authenticated users. Any user can create category,
+    and read all categories, but edit can only owner or admin."""
 
-    # permission_classes = [IsAuthenticated]
+    permission_classes = [IsAuthenticated & IsOwnerOrAdminOrReadOnly]
 
     serializer_class = serializers.CategorySerializer
     queryset = models.Category.objects.all()
@@ -18,7 +20,7 @@ class CategoryViewSet(viewsets.ModelViewSet):
 
 class NoteViewSet(viewsets.ModelViewSet):
     """ViewSet CRUD for note, use different serializers for any action.
-       User can see only him notes, admin every note"""
+       User can see and edit only him notes, admin every note"""
 
     serializer_classes = {
         'create': serializers.NoteSerializerCreate,
@@ -29,26 +31,14 @@ class NoteViewSet(viewsets.ModelViewSet):
     def get_serializer_class(self):
         return self.serializer_classes.get(self.action, self.default_serializer_class)
 
-    permission_classes = [IsAuthenticated]
+    permission_classes = [IsAuthenticated & IsOwnerOrAdmin]
 
     queryset = models.Note.objects.all()
     lookup_field = 'slug'
 
-    def retrieve(self, request, *args, **kwargs):
-        # pytest send object in request, but when we using django it send id. There is check for test
-        user = get_user_object(request.user)
-
-
-        instance = self.get_object()
-
-        if instance.user != user.pk and not user.is_superuser:
-            return Response("You don't have access for this note", status=403)
-
-        serializer = self.get_serializer(instance)
-
-        return Response(serializer.data)
-
     def list(self, request, *args, **kwargs):
+        """Return only users notes or all if it's admin"""
+
         user = get_user_object(request.user)
 
         if user.is_superuser:
@@ -63,6 +53,3 @@ class NoteViewSet(viewsets.ModelViewSet):
 
         serializer = self.get_serializer(queryset, many=True)
         return Response(serializer.data)
-
-
-

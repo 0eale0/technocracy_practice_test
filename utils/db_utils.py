@@ -17,7 +17,7 @@ def create_user(data: dict) -> User:
 
 
 def get_user_object(user) -> User:
-    # pytest send object, simple using id. There is check for it
+    # pytest send object, simple using send id. There is check for it
     user = User.objects.get(id=user) if type(user) == int else user
 
     return user
