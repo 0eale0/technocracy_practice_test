@@ -33,14 +33,13 @@ class TestNotes(InitUsers):
         url = f"/api/logic/note/"
         payload = {"header": "attention",
                    "text": "wow, so cute ^_^",
-                   "slug": "warning",
-                   "user": self.user.pk}
+                   "slug": "warning"}
 
         response = self.user_authorized.post(path=url, data=payload)
 
         result = response.json()
 
-        result_from_db = model_to_dict(Note.objects.get(id=result["id"]))
+        result_from_db = model_to_dict(Note.objects.get(slug=result["slug"]))
 
         assert response.status_code == 201
         assert result == result_from_db

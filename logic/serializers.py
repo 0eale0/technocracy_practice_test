@@ -55,5 +55,5 @@ class NoteSerializerCreate(serializers.ModelSerializer):
 
     class Meta:
         model = Note
-        fields = ["header", "text", "slug", "categories", "user", "id"]
+        fields = ["header", "text", "slug", "categories", "user"]
         lookup_field = 'slug'
